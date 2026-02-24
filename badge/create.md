@@ -1,35 +1,32 @@
-# 뱃지 부여
+## 뱃지 부여
 
-{% swagger method="post" path="/v1/admin/members/badges" baseUrl="" summary="활동 뱃지 부여 (관리자)" %}
-{% swagger-description %}
+### 개요
 관리자가 회원에게 활동 뱃지를 부여합니다.
-{% endswagger-description %}
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`POST /v1/admin/members/badges`
 
-{% swagger-parameter in="body" name="badgeType" type="String" required="true" %}
-뱃지 타입
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** JWT 인증 필요
+- **권한:** `ADMIN`, `PRESIDENT`, `MANAGER`
 
-{% swagger-parameter in="body" name="memberIdList" type="Array" required="true" %}
-뱃지를 부여할 회원 ID 목록
-{% endswagger-parameter %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
 
-{% swagger-response status="201" description="부여 성공" %}
-```json
-{
-  "code": 201,
-  "message": "[활동 뱃지]가 성공적으로 부여되었습니다.",
-  "data": null
-}
-```
-{% endswagger-response %}
-{% endswagger %}
+### 요청 (Request)
 
-### BadgeType 값
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | Y |
 
+**Body**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| badgeType | String | 뱃지 타입 (아래 BadgeType 참조) | Y |
+| memberIdList | Array\<Long\> | 뱃지를 부여할 회원 ID 목록 | Y |
+
+**BadgeType**
 | 값 | 설명 |
 |----|------|
 | EXCELLENT_MEMBER_1ST | 우수회원 1위 |
@@ -41,11 +38,28 @@ Bearer {accessToken}
 | COLLABORATIVE_PROJECT_1ST | 연합 프로젝트 1위 |
 | COLLABORATIVE_PROJECT_2ND | 연합 프로젝트 2위 |
 
-### Request Body 예시
-
+**요청 예시**
 ```json
 {
   "badgeType": "EXCELLENT_MEMBER_1ST",
   "memberIdList": [1, 2, 3]
+}
+```
+
+---
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 201 Created | 부여 성공 |
+
+**응답 예시**
+```json
+{
+  "code": 201,
+  "message": "[활동 뱃지]가 성공적으로 부여되었습니다.",
+  "data": null
 }
 ```

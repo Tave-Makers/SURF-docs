@@ -2,20 +2,45 @@
 
 ## 회원가입 승인
 
-{% swagger method="patch" path="/v1/admin/members/{memberId}/approve" baseUrl="" summary="회원가입 승인 (관리자)" %}
-{% swagger-description %}
-관리자가 회원의 회원가입을 승인합니다.
-{% endswagger-description %}
+### 개요
+관리자가 회원의 회원가입 요청을 승인합니다.
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`PATCH /v1/admin/members/{memberId}/approve`
 
-{% swagger-parameter in="path" name="memberId" type="Long" required="true" %}
-회원 ID
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** 필요
+- **권한:** `ADMIN`, `PRESIDENT`, `MANAGER`
 
-{% swagger-response status="200" description="승인 성공" %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
+
+### 요청 (Request)
+
+**Headers**
+
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| `Authorization` | String | `Bearer {accessToken}` | O |
+
+**Path Parameters**
+
+| Key | Type | 설명 |
+|-----|------|------|
+| `memberId` | Long | 승인할 회원의 ID |
+
+---
+
+### 응답 (Response)
+
+**성공**
+
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 | OK - 승인 성공 |
+
+**응답 예시**
+
 ```json
 {
   "code": 200,
@@ -23,9 +48,17 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="404" description="회원 없음" %}
+---
+
+### 실패 (Error)
+
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 404 | Not Found | 존재하지 않는 회원 |
+
+**응답 예시 (404)**
+
 ```json
 {
   "code": 404,
@@ -33,27 +66,52 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
+
+---
 
 ---
 
 ## 회원가입 거절
 
-{% swagger method="patch" path="/v1/admin/members/{memberId}/reject" baseUrl="" summary="회원가입 거절 (관리자)" %}
-{% swagger-description %}
-관리자가 회원의 회원가입을 거절합니다.
-{% endswagger-description %}
+### 개요
+관리자가 회원의 회원가입 요청을 거절합니다.
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`PATCH /v1/admin/members/{memberId}/reject`
 
-{% swagger-parameter in="path" name="memberId" type="Long" required="true" %}
-회원 ID
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** 필요
+- **권한:** `ADMIN`, `PRESIDENT`, `MANAGER`
 
-{% swagger-response status="200" description="거절 성공" %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
+
+### 요청 (Request)
+
+**Headers**
+
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| `Authorization` | String | `Bearer {accessToken}` | O |
+
+**Path Parameters**
+
+| Key | Type | 설명 |
+|-----|------|------|
+| `memberId` | Long | 거절할 회원의 ID |
+
+---
+
+### 응답 (Response)
+
+**성공**
+
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 | OK - 거절 성공 |
+
+**응답 예시**
+
 ```json
 {
   "code": 200,
@@ -61,9 +119,17 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="404" description="회원 없음" %}
+---
+
+### 실패 (Error)
+
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 404 | Not Found | 존재하지 않는 회원 |
+
+**응답 예시 (404)**
+
 ```json
 {
   "code": 404,
@@ -71,5 +137,3 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}

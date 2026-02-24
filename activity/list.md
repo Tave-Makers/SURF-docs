@@ -1,23 +1,56 @@
-# 활동기록 조회
+## 활동기록 조회
 
-{% swagger method="get" path="/v1/user/members/activity-records" baseUrl="" summary="활동 기록 조회 (무한스크롤)" %}
-{% swagger-description %}
+### 개요
 본인의 활동 기록을 무한스크롤 방식으로 조회합니다.
-{% endswagger-description %}
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`GET /v1/user/members/activity-records`
 
-{% swagger-parameter in="query" name="pageNum" type="Integer" required="false" %}
-페이지 번호 (기본값: 0)
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** JWT 인증 필요
+- **권한:** `MEMBER`, `ADMIN`, `PRESIDENT`, `MANAGER`
 
-{% swagger-parameter in="query" name="pageSize" type="Integer" required="false" %}
-페이지 크기
-{% endswagger-parameter %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
 
-{% swagger-response status="200" description="조회 성공" %}
+### 요청 (Request)
+
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | Y |
+
+**Query Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| pageNum | Integer | 페이지 번호 (기본값: 0) | N |
+| pageSize | Integer | 페이지 크기 | N |
+
+---
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 조회 성공 |
+
+**Body**
+| Key | Type | 설명 |
+|-----|------|------|
+| content | Array | 활동 기록 목록 |
+| content[].categoryName | String | 활동 카테고리명 |
+| content[].activityName | String | 활동 유형명 |
+| content[].scoreType | String | REWARD(상점) / PENALTY(벌점) |
+| content[].appliedScore | BigDecimal | 적용된 점수 |
+| content[].prefixSum | BigDecimal | 누적 점수 |
+| content[].activityDate | String | 활동 날짜 (YY.MM.DD) |
+| pageNumber | Integer | 현재 페이지 번호 |
+| pageSize | Integer | 페이지 크기 |
+| numberOfElements | Integer | 현재 페이지 요소 수 |
+| isLast | Boolean | 마지막 페이지 여부 |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -40,16 +73,3 @@ Bearer {accessToken}
   }
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
-
-### Response 필드
-
-| 필드 | 타입 | 설명 |
-|------|------|------|
-| categoryName | String | 활동 카테고리명 |
-| activityName | String | 활동 유형명 |
-| scoreType | String | REWARD(상점) / PENALTY(벌점) |
-| appliedScore | BigDecimal | 적용된 점수 |
-| prefixSum | BigDecimal | 누적 점수 |
-| activityDate | String | 활동 날짜 (YY.MM.DD) |

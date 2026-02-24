@@ -1,27 +1,52 @@
-# 피드백 조회
+## 피드백 조회
 
-{% swagger method="get" path="/v1/admin/feedbacks" baseUrl="" summary="피드백 조회 (운영진 전용)" %}
-{% swagger-description %}
-운영진(ROOT, MANAGER, PRESIDENT)이 피드백을 조회합니다.
-{% endswagger-description %}
+### 개요
+운영진이 피드백을 조회합니다.
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`GET /v1/admin/feedbacks`
 
-{% swagger-parameter in="query" name="page" type="Integer" required="false" %}
-페이지 번호 (기본값: 0)
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** JWT 인증 필요 (PreAuthorize)
+- **권한:** `ADMIN`, `PRESIDENT`, `MANAGER`
 
-{% swagger-parameter in="query" name="size" type="Integer" required="false" %}
-페이지 크기 (기본값: 20)
-{% endswagger-parameter %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
 
-{% swagger-parameter in="query" name="sort" type="String" required="false" %}
-정렬 (기본값: createdAt,desc)
-{% endswagger-parameter %}
+### 요청 (Request)
 
-{% swagger-response status="200" description="조회 성공" %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | Y |
+
+**Query Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| page | Integer | 페이지 번호 (기본값: 0) | N |
+| size | Integer | 페이지 크기 (기본값: 20) | N |
+| sort | String | 정렬 (기본값: createdAt,desc) | N |
+
+---
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 조회 성공 |
+
+**Body**
+| Key | Type | 설명 |
+|-----|------|------|
+| content | Array | 피드백 목록 (Slice) |
+| content[].id | Long | 피드백 ID |
+| content[].content | String | 피드백 내용 |
+| content[].createdAt | String | 생성 시간 |
+| last | Boolean | 마지막 페이지 여부 |
+| numberOfElements | Integer | 현재 페이지 요소 수 |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -44,9 +69,15 @@ Bearer {accessToken}
   }
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="403" description="권한 부족" %}
+---
+
+### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 403 Forbidden | 권한 부족 | 운영진 권한이 없음 |
+
+**응답 예시**
 ```json
 {
   "code": 403,
@@ -54,5 +85,3 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}

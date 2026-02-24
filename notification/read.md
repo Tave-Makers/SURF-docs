@@ -1,19 +1,40 @@
-# 알림 읽음 처리
+## 알림 읽음 처리
 
-{% swagger method="patch" path="/v1/user/notifications/{notificationId}/read" baseUrl="" summary="알림 읽음 처리" %}
-{% swagger-description %}
+### 개요
 특정 알림을 읽음 처리합니다.
-{% endswagger-description %}
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`PATCH /v1/user/notifications/{notificationId}/read`
 
-{% swagger-parameter in="path" name="notificationId" type="Long" required="true" %}
-알림 ID
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** JWT 인증 필요
+- **권한:** `MEMBER`, `ADMIN`, `PRESIDENT`, `MANAGER`
 
-{% swagger-response status="200" description="읽음 처리 성공" %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
+
+### 요청 (Request)
+
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | Y |
+
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| notificationId | Long | 알림 ID | Y |
+
+---
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 읽음 처리 성공 |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -21,9 +42,15 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="404" description="알림 없음" %}
+---
+
+### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 404 Not Found | 알림 없음 | 해당 알림을 찾을 수 없음 |
+
+**응답 예시**
 ```json
 {
   "code": 404,
@@ -31,5 +58,3 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}

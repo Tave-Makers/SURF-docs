@@ -1,84 +1,68 @@
 # 회원 프로필 수정
 
-{% swagger method="patch" path="/v1/user/members/profile/update" baseUrl="" summary="회원 프로필 수정" %}
-{% swagger-description %}
-마이페이지에서 프로필을 수정합니다. 변경하고자 하는 필드만 포함하여 요청합니다.
-{% endswagger-description %}
+## 마이페이지 프로필 수정
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 개요
+마이페이지에서 프로필을 수정합니다. 변경하고자 하는 필드만 포함하여 요청합니다. 경력 정보는 생성, 수정, 삭제를 한 번의 요청으로 처리할 수 있습니다.
 
-{% swagger-parameter in="body" name="email" type="String" required="false" %}
-이메일 (이메일 형식)
-{% endswagger-parameter %}
+### 엔드포인트
+`PATCH /v1/user/members/profile/update`
 
-{% swagger-parameter in="body" name="university" type="String" required="false" %}
-대학교
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** 필요
+- **권한:** `MEMBER`, `MANAGER`, `PRESIDENT`, `ADMIN`
 
-{% swagger-parameter in="body" name="graduateSchool" type="String" required="false" %}
-대학원
-{% endswagger-parameter %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
 
-{% swagger-parameter in="body" name="selfIntroduction" type="String" required="false" %}
-자기소개 (최대 256자)
-{% endswagger-parameter %}
+### 요청 (Request)
 
-{% swagger-parameter in="body" name="link" type="String" required="false" %}
-링크 (최대 1024자)
-{% endswagger-parameter %}
+**Headers**
 
-{% swagger-parameter in="body" name="phoneNumber" type="String" required="false" %}
-전화번호 (8-15자리)
-{% endswagger-parameter %}
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| `Authorization` | String | `Bearer {accessToken}` | O |
+| `Content-Type` | String | `application/json` | O |
 
-{% swagger-parameter in="body" name="phoneNumberPublic" type="Boolean" required="false" %}
-전화번호 공개 여부
-{% endswagger-parameter %}
+**Body**
 
-{% swagger-parameter in="body" name="profileImageUrl" type="String" required="false" %}
-프로필 이미지 URL
-{% endswagger-parameter %}
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| `email` | String | 이메일 (이메일 형식) | X |
+| `university` | String | 대학교 | X |
+| `graduateSchool` | String | 대학원 | X |
+| `selfIntroduction` | String | 자기소개 (최대 256자) | X |
+| `link` | String | 링크 (최대 1024자) | X |
+| `phoneNumber` | String | 전화번호 (8-15자리) | X |
+| `phoneNumberPublic` | Boolean | 전화번호 공개 여부 | X |
+| `profileImageUrl` | String | 프로필 이미지 URL | X |
+| `isProfileImageChanged` | Boolean | 프로필 이미지 변경 여부 | X |
+| `careersToCreate` | Array | 생성할 경력 목록 | X |
+| `careersToUpdate` | Array | 수정할 경력 목록 | X |
+| `careerIdsToDelete` | Array | 삭제할 경력 ID 목록 | X |
 
-{% swagger-parameter in="body" name="isProfileImageChanged" type="Boolean" required="false" %}
-프로필 이미지 변경 여부
-{% endswagger-parameter %}
+**careersToCreate (경력 생성)**
 
-{% swagger-parameter in="body" name="careersToCreate" type="Array" required="false" %}
-생성할 경력 목록
-{% endswagger-parameter %}
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| `companyName` | String | 회사명 | O |
+| `position` | String | 직무 | O |
+| `startDate` | String | 근무 시작일 (YYYY-MM-DD) | O |
+| `endDate` | String | 근무 종료일 (YYYY-MM-DD) | X |
+| `isWorking` | Boolean | 현재 근무 중 여부 | O |
 
-{% swagger-parameter in="body" name="careersToUpdate" type="Array" required="false" %}
-수정할 경력 목록
-{% endswagger-parameter %}
+**careersToUpdate (경력 수정)**
 
-{% swagger-parameter in="body" name="careerIdsToDelete" type="Array" required="false" %}
-삭제할 경력 ID 목록
-{% endswagger-parameter %}
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| `careerId` | Long | 경력 ID | O |
+| `companyName` | String | 회사명 | O |
+| `position` | String | 직무 | O |
+| `startDate` | String | 근무 시작일 (YYYY-MM-DD) | O |
+| `endDate` | String | 근무 종료일 (YYYY-MM-DD) | X |
+| `isWorking` | Boolean | 현재 근무 중 여부 | O |
 
-{% swagger-response status="200" description="프로필 수정 성공" %}
-```json
-{
-  "code": 200,
-  "message": "마이페이지에서 [프로필 정보]를 수정했습니다.",
-  "data": null
-}
-```
-{% endswagger-response %}
-
-{% swagger-response status="400" description="유효하지 않은 입력값" %}
-```json
-{
-  "code": 400,
-  "message": "잘못된 [인자]입니다.",
-  "data": null
-}
-```
-{% endswagger-response %}
-{% endswagger %}
-
-### Request Body 예시
+**요청 예시**
 
 ```json
 {
@@ -111,13 +95,46 @@ Bearer {accessToken}
 }
 ```
 
-### Career 필드 설명
+---
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| careerId | Long | 수정 시 필수 | 경력 ID |
-| companyName | String | O | 회사명 |
-| position | String | O | 직무 |
-| startDate | String | O | 근무 시작일 (YYYY-MM-DD) |
-| endDate | String | X | 근무 종료일 (YYYY-MM-DD) |
-| isWorking | Boolean | O | 현재 근무 중 여부 |
+### 응답 (Response)
+
+**성공**
+
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 | OK - 프로필 수정 성공 |
+
+**Body**
+
+| Key | Type | 설명 |
+|-----|------|------|
+| `data` | null | 응답 데이터 없음 |
+
+**응답 예시**
+
+```json
+{
+  "code": 200,
+  "message": "마이페이지에서 [프로필 정보]를 수정했습니다.",
+  "data": null
+}
+```
+
+---
+
+### 실패 (Error)
+
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 400 | Bad Request | 유효하지 않은 입력값 (이메일 형식, 전화번호 자릿수 등) |
+
+**응답 예시 (400)**
+
+```json
+{
+  "code": 400,
+  "message": "잘못된 [인자]입니다.",
+  "data": null
+}
+```

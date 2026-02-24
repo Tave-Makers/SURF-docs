@@ -1,15 +1,49 @@
-# 활동점수 조회
+## 활동점수 조회
 
-{% swagger method="get" path="/v1/user/members/personal-score/pinned5" baseUrl="" summary="개인 활동점수 + 고정 5개 활동기록 조회" %}
-{% swagger-description %}
+### 개요
 개인 활동점수와 최근 고정된 5개의 활동기록을 함께 조회합니다.
-{% endswagger-description %}
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`GET /v1/user/members/personal-score/pinned5`
 
-{% swagger-response status="200" description="조회 성공" %}
+### 인증
+- **인증 필요 여부:** JWT 인증 필요
+- **권한:** `MEMBER`, `ADMIN`, `PRESIDENT`, `MANAGER`
+
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
+
+### 요청 (Request)
+
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | Y |
+
+---
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 조회 성공 |
+
+**Body**
+| Key | Type | 설명 |
+|-----|------|------|
+| personalScore | BigDecimal | 개인 활동점수 |
+| pinnedRecords | Array | 고정된 최근 5개 활동기록 |
+| pinnedRecords[].categoryName | String | 활동 카테고리명 |
+| pinnedRecords[].activityName | String | 활동 유형명 |
+| pinnedRecords[].scoreType | String | REWARD(상점) / PENALTY(벌점) |
+| pinnedRecords[].appliedScore | BigDecimal | 적용된 점수 |
+| pinnedRecords[].prefixSum | BigDecimal | 누적 점수 |
+| pinnedRecords[].activityDate | String | 활동 날짜 (YY.MM.DD) |
+
+> 기본 점수: YB(신입) = 100점, 기존 회원 = 50점
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -29,9 +63,15 @@ Bearer {accessToken}
   }
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="400" description="점수 조회 실패" %}
+---
+
+### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 400 Bad Request | 조회 실패 | 개인활동점수를 조회할 수 없음 |
+
+**응답 예시**
 ```json
 {
   "code": 400,
@@ -39,12 +79,3 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
-
-### 기본 점수
-
-| 구분 | 초기 점수 |
-|------|----------|
-| YB (신입) | 100점 |
-| 기존 회원 | 50점 |

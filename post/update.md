@@ -1,47 +1,97 @@
-# 게시글 수정
+## 게시글 수정
 
-{% swagger method="patch" path="/v1/user/posts/{postId}" baseUrl="" summary="게시글 수정" %}
-{% swagger-description %}
-본인이 작성한 게시글을 수정합니다. 작성자만 수정 가능합니다.
-{% endswagger-description %}
+### 개요
+본인이 작성한 게시글을 수정합니다. 작성자 본인만 수정 가능합니다.
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`PATCH /v1/user/posts/{postId}`
 
-{% swagger-parameter in="path" name="postId" type="Long" required="true" %}
-게시글 ID
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** 필요
+- **권한:** `MEMBER` (작성자 본인만)
 
-{% swagger-parameter in="body" name="title" type="String" required="true" %}
-수정된 제목
-{% endswagger-parameter %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
 
-{% swagger-parameter in="body" name="content" type="String" required="true" %}
-수정된 내용
-{% endswagger-parameter %}
+### 요청 (Request)
 
-{% swagger-parameter in="body" name="categoryId" type="Long" required="false" %}
-카테고리 ID
-{% endswagger-parameter %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 액세스 토큰 | O |
 
-{% swagger-parameter in="body" name="pinned" type="Boolean" required="false" %}
-상단 고정 여부
-{% endswagger-parameter %}
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| postId | Long | 게시글 ID | O |
 
-{% swagger-parameter in="body" name="isImageChanged" type="Boolean" required="false" %}
-이미지 변경 여부
-{% endswagger-parameter %}
+**Body**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| title | String | 수정된 제목 | O |
+| content | String | 수정된 내용 | O |
+| isContentChanged | Boolean | 내용 변경 여부 | X |
+| categoryId | Long | 카테고리 ID | X |
+| pinned | Boolean | 상단 고정 여부 | X |
+| isReservationChanged | Boolean | 예약 변경 여부 | X |
+| reservedAt | String | 예약 시간 (ISO 8601) | X |
+| isImageChanged | Boolean | 이미지 변경 여부 | X |
+| imageUrlList | Array | 변경된 이미지 목록 | X |
+| imageUrlList[].originalUrl | String | 이미지 URL | O |
+| imageUrlList[].sequence | Integer | 이미지 순서 | O |
+| hasSchedule | Boolean | 일정 매핑 여부 | X |
 
-{% swagger-parameter in="body" name="imageUrlList" type="Array" required="false" %}
-변경된 이미지 목록
-{% endswagger-parameter %}
+**요청 예시**
+```json
+{
+  "title": "수정된 제목",
+  "content": "수정된 내용",
+  "isContentChanged": true,
+  "categoryId": 3,
+  "pinned": false,
+  "isReservationChanged": false,
+  "reservedAt": null,
+  "isImageChanged": true,
+  "imageUrlList": [],
+  "hasSchedule": false
+}
+```
 
-{% swagger-parameter in="body" name="hasSchedule" type="Boolean" required="false" %}
-일정 매핑 여부
-{% endswagger-parameter %}
+---
 
-{% swagger-response status="200" description="수정 성공" %}
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 게시글 수정 성공 |
+
+**Body (PostDetailResDTO)**
+| Key | Type | 설명 |
+|-----|------|------|
+| postId | Long | 게시글 ID |
+| title | String | 제목 |
+| content | String | 내용 |
+| pinned | Boolean | 상단 고정 여부 |
+| postedAt | String | 작성 시간 (ISO 8601) |
+| boardId | Long | 게시판 ID |
+| categoryId | Long | 카테고리 ID |
+| scrappedByMe | Boolean | 현재 사용자 스크랩 여부 |
+| scrapCount | Long | 스크랩 수 |
+| likedByMe | Boolean | 현재 사용자 좋아요 여부 |
+| likeCount | Long | 좋아요 수 |
+| commentCount | Long | 댓글 수 |
+| nickname | String | 작성자 닉네임 |
+| profileImageUrl | String | 작성자 프로필 이미지 URL |
+| isMine | Boolean | 본인 게시글 여부 |
+| imageUrlList | Array | 이미지 목록 |
+| isReserved | Boolean | 예약 게시글 여부 |
+| reservedAt | String | 예약 시간 |
+| viewCount | Integer | 조회수 |
+| hasSchedule | Boolean | 일정 매핑 여부 |
+| scheduleId | Long | 일정 ID |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -71,19 +121,23 @@ Bearer {accessToken}
   }
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="401" description="권한 없음" %}
+---
+
+### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 401 Unauthorized | 권한 없음 | 작성자 본인이 아닌 경우 |
+| 404 Not Found | 게시글 없음 | 해당 ID의 게시글이 존재하지 않음 |
+
+**응답 예시**
 ```json
 {
   "code": 401,
-  "message": "[게시글]을 삭제할 권한이 없습니다.",
+  "message": "[게시글]을 수정할 권한이 없습니다.",
   "data": null
 }
 ```
-{% endswagger-response %}
-
-{% swagger-response status="404" description="게시글 없음" %}
 ```json
 {
   "code": 404,
@@ -91,5 +145,3 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}

@@ -1,21 +1,47 @@
-# 댓글 좋아요
+## 댓글 좋아요
 
-## 좋아요 토글
+### 개요
+댓글에 대한 좋아요 토글, 개수 조회, 본인 좋아요 여부 조회, 좋아요 누른 회원 목록 조회 기능을 제공합니다.
 
-{% swagger method="post" path="/v1/user/comments/{commentId}/like" baseUrl="" summary="댓글 좋아요 토글" %}
-{% swagger-description %}
-댓글 좋아요를 토글합니다. 이미 눌렀으면 취소, 안 눌렀으면 좋아요 처리됩니다.
-{% endswagger-description %}
+### 인증 (공통)
+- **인증 필요 여부:** JWT 인증 필요
+- **권한:** `MEMBER`, `ADMIN`, `PRESIDENT`, `MANAGER`
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
 
-{% swagger-parameter in="path" name="commentId" type="Long" required="true" %}
-댓글 ID
-{% endswagger-parameter %}
+---
 
-{% swagger-response status="200" description="토글 성공" %}
+### 1. 좋아요 토글
+
+#### 엔드포인트
+`POST /v1/user/comments/{commentId}/like`
+
+#### 요청 (Request)
+
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | O |
+
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| commentId | Long | 댓글 ID | O |
+
+#### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 토글 성공 |
+
+**Body**
+| Key | Type | 설명 |
+|-----|------|------|
+| liked | Boolean | 좋아요 상태 (true: 좋아요, false: 취소) |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -25,9 +51,13 @@ Bearer {accessToken}
   }
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="404" description="댓글 없음" %}
+#### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 404 Not Found | 리소스 없음 | 댓글이 존재하지 않음 |
+
+**응답 예시**
 ```json
 {
   "code": 404,
@@ -35,27 +65,39 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
 
 ---
 
-## 좋아요 개수 조회
+### 2. 좋아요 개수 조회
 
-{% swagger method="get" path="/v1/user/comments/{commentId}/like/count" baseUrl="" summary="댓글 좋아요 개수 조회" %}
-{% swagger-description %}
-특정 댓글의 좋아요 개수를 조회합니다.
-{% endswagger-description %}
+#### 엔드포인트
+`GET /v1/user/comments/{commentId}/like/count`
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+#### 요청 (Request)
 
-{% swagger-parameter in="path" name="commentId" type="Long" required="true" %}
-댓글 ID
-{% endswagger-parameter %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | O |
 
-{% swagger-response status="200" description="조회 성공" %}
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| commentId | Long | 댓글 ID | O |
+
+#### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 조회 성공 |
+
+**Body**
+| Key | Type | 설명 |
+|-----|------|------|
+| data | Integer | 좋아요 개수 |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -63,27 +105,39 @@ Bearer {accessToken}
   "data": 5
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
 
 ---
 
-## 좋아요 여부 조회
+### 3. 본인 좋아요 여부 조회
 
-{% swagger method="get" path="/v1/user/comments/{commentId}/like/me" baseUrl="" summary="댓글 좋아요 여부 조회" %}
-{% swagger-description %}
-현재 사용자가 특정 댓글에 좋아요를 눌렀는지 확인합니다.
-{% endswagger-description %}
+#### 엔드포인트
+`GET /v1/user/comments/{commentId}/like/me`
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+#### 요청 (Request)
 
-{% swagger-parameter in="path" name="commentId" type="Long" required="true" %}
-댓글 ID
-{% endswagger-parameter %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | O |
 
-{% swagger-response status="200" description="조회 성공" %}
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| commentId | Long | 댓글 ID | O |
+
+#### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 조회 성공 |
+
+**Body**
+| Key | Type | 설명 |
+|-----|------|------|
+| data | Boolean | 본인 좋아요 여부 (true/false) |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -91,27 +145,41 @@ Bearer {accessToken}
   "data": true
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
 
 ---
 
-## 좋아요 누른 회원 목록
+### 4. 좋아요 누른 회원 목록
 
-{% swagger method="get" path="/v1/user/comments/{commentId}/like/members" baseUrl="" summary="댓글 좋아요 누른 회원 목록" %}
-{% swagger-description %}
-특정 댓글에 좋아요를 누른 회원 목록을 조회합니다.
-{% endswagger-description %}
+#### 엔드포인트
+`GET /v1/user/comments/{commentId}/like/members`
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+#### 요청 (Request)
 
-{% swagger-parameter in="path" name="commentId" type="Long" required="true" %}
-댓글 ID
-{% endswagger-parameter %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | O |
 
-{% swagger-response status="200" description="조회 성공" %}
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| commentId | Long | 댓글 ID | O |
+
+#### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 조회 성공 |
+
+**Body**
+| Key | Type | 설명 |
+|-----|------|------|
+| memberId | Long | 회원 ID |
+| nickname | String | 닉네임 |
+| profileImageUrl | String | 프로필 이미지 URL |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -125,5 +193,3 @@ Bearer {accessToken}
   ]
 }
 ```
-{% endswagger-response %}
-{% endswagger %}

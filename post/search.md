@@ -1,29 +1,52 @@
-# 게시글 검색
-
 ## 게시글 검색
 
-{% swagger method="get" path="/v1/user/search/posts" baseUrl="" summary="게시글 검색" %}
-{% swagger-description %}
+### 개요
+게시글 검색 및 최근 검색어 관리 기능을 제공합니다.
+
+### 인증
+- **인증 필요 여부:** 필요
+- **권한:** `MEMBER`, `ADMIN`, `PRESIDENT`, `MANAGER`
+
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
+
+---
+
+## 1. 게시글 검색
+
+### 엔드포인트
+`GET /v1/user/search/posts`
+
 게시글을 제목과 본문 기준으로 검색합니다. 최근 검색어가 자동으로 저장됩니다.
-{% endswagger-description %}
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 요청 (Request)
 
-{% swagger-parameter in="query" name="param" type="String" required="true" %}
-검색어
-{% endswagger-parameter %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 액세스 토큰 | O |
 
-{% swagger-parameter in="query" name="page" type="Integer" required="false" %}
-페이지 번호 (기본값: 0)
-{% endswagger-parameter %}
+**Query Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| param | String | 검색어 | O |
+| page | Integer | 페이지 번호 (기본값: 0) | X |
+| size | Integer | 페이지 크기 (기본값: 20) | X |
 
-{% swagger-parameter in="query" name="size" type="Integer" required="false" %}
-페이지 크기 (기본값: 20)
-{% endswagger-parameter %}
+### 응답 (Response)
 
-{% swagger-response status="200" description="검색 성공" %}
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 검색 성공 |
+
+**Body**
+| Key | Type | 설명 |
+|-----|------|------|
+| content | Array | 검색 결과 목록 (PostResDTO) |
+| hasNext | Boolean | 다음 페이지 존재 여부 |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -53,9 +76,13 @@ Bearer {accessToken}
   }
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="400" description="검색어 누락" %}
+### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 400 Bad Request | 검색어 누락 | 검색어가 입력되지 않음 |
+
+**응답 예시**
 ```json
 {
   "code": 400,
@@ -63,23 +90,31 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
 
 ---
 
-## 최근 검색어 조회
+## 2. 최근 검색어 조회
 
-{% swagger method="get" path="/v1/user/search/recent" baseUrl="" summary="최근 검색어 10개 조회" %}
-{% swagger-description %}
-현재 사용자의 최근 검색어 10개를 조회합니다 (최신순).
-{% endswagger-description %}
+### 엔드포인트
+`GET /v1/user/search/recent`
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+현재 사용자의 최근 검색어 10개를 최신순으로 조회합니다.
 
-{% swagger-response status="200" description="조회 성공" %}
+### 요청 (Request)
+
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 액세스 토큰 | O |
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 조회 성공 |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -87,23 +122,31 @@ Bearer {accessToken}
   "data": ["검색어1", "검색어2", "검색어3"]
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
 
 ---
 
-## 최근 검색어 전체 삭제
+## 3. 최근 검색어 전체 삭제
 
-{% swagger method="delete" path="/v1/user/search/recent" baseUrl="" summary="최근 검색어 전체 삭제" %}
-{% swagger-description %}
+### 엔드포인트
+`DELETE /v1/user/search/recent`
+
 현재 사용자의 모든 최근 검색어를 삭제합니다.
-{% endswagger-description %}
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 요청 (Request)
 
-{% swagger-response status="204" description="삭제 성공" %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 액세스 토큰 | O |
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 204 No Content | 삭제 성공 |
+
+**응답 예시**
 ```json
 {
   "code": 204,
@@ -111,27 +154,36 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
 
 ---
 
-## 최근 검색어 단건 삭제
+## 4. 최근 검색어 단건 삭제
 
-{% swagger method="delete" path="/v1/user/search/recent/{keyword}" baseUrl="" summary="최근 검색어 단건 삭제" %}
-{% swagger-description %}
+### 엔드포인트
+`DELETE /v1/user/search/recent/{keyword}`
+
 특정 최근 검색어 하나를 삭제합니다.
-{% endswagger-description %}
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 요청 (Request)
 
-{% swagger-parameter in="path" name="keyword" type="String" required="true" %}
-삭제할 검색어
-{% endswagger-parameter %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 액세스 토큰 | O |
 
-{% swagger-response status="204" description="삭제 성공" %}
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| keyword | String | 삭제할 검색어 | O |
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 204 No Content | 삭제 성공 |
+
+**응답 예시**
 ```json
 {
   "code": 204,
@@ -139,5 +191,3 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}

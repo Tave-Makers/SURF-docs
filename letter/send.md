@@ -1,35 +1,69 @@
-# 쪽지 전송
+## 쪽지 전송
 
-{% swagger method="post" path="/v1/user/letters" baseUrl="" summary="쪽지 전송" %}
-{% swagger-description %}
+### 개요
 다른 회원에게 쪽지를 전송합니다. 수신자에게 이메일과 푸시 알림이 발송됩니다.
-{% endswagger-description %}
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`POST /v1/user/letters`
 
-{% swagger-parameter in="body" name="receiverId" type="Long" required="true" %}
-수신자 회원 ID
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** JWT 인증 필요
+- **권한:** `MEMBER`, `ADMIN`, `PRESIDENT`, `MANAGER`
 
-{% swagger-parameter in="body" name="title" type="String" required="true" %}
-쪽지 제목 (최대 100자)
-{% endswagger-parameter %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
 
-{% swagger-parameter in="body" name="content" type="String" required="true" %}
-쪽지 본문 (최대 10000자)
-{% endswagger-parameter %}
+### 요청 (Request)
 
-{% swagger-parameter in="body" name="sns" type="String" required="false" %}
-추가 연락 SNS (최대 100자)
-{% endswagger-parameter %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | O |
 
-{% swagger-parameter in="body" name="replyEmail" type="String" required="true" %}
-회신 받을 이메일 (최대 100자)
-{% endswagger-parameter %}
+**Body**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| receiverId | Long | 수신자 회원 ID | O |
+| title | String | 쪽지 제목 (최대 100자) | O |
+| content | String | 쪽지 본문 (최대 10000자) | O |
+| sns | String | 추가 연락 SNS (최대 100자) | X |
+| replyEmail | String | 회신 받을 이메일 (최대 100자, 이메일 형식) | O |
 
-{% swagger-response status="200" description="전송 성공" %}
+**요청 예시**
+```json
+{
+  "receiverId": 3,
+  "title": "문의드립니다.",
+  "content": "안녕하세요, 몇 가지 질문이 있습니다.",
+  "sns": "@instagram_user",
+  "replyEmail": "sender@example.com"
+}
+```
+
+---
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 전송 성공 |
+
+**Body**
+| Key | Type | 설명 |
+|-----|------|------|
+| letterId | Long | 쪽지 ID |
+| title | String | 쪽지 제목 |
+| content | String | 쪽지 본문 |
+| sns | String | 추가 연락 SNS |
+| replyEmail | String | 회신 이메일 |
+| senderId | Long | 발신자 회원 ID |
+| senderName | String | 발신자 이름 |
+| receiverId | Long | 수신자 회원 ID |
+| receiverName | String | 수신자 이름 |
+| createdAt | String | 전송일시 |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -48,9 +82,17 @@ Bearer {accessToken}
   }
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="400" description="유효성 검증 실패" %}
+---
+
+### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 400 Bad Request | 유효성 검증 실패 | 필수 필드 누락, 형식 오류 등 |
+| 404 Not Found | 리소스 없음 | 수신자가 존재하지 않음 |
+| 500 Internal Server Error | 서버 오류 | 이메일 발송 실패 |
+
+**응답 예시**
 ```json
 {
   "code": 400,
@@ -58,9 +100,7 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="404" description="수신자 없음" %}
 ```json
 {
   "code": 404,
@@ -68,9 +108,7 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="500" description="이메일 발송 실패" %}
 ```json
 {
   "code": 500,
@@ -78,5 +116,3 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}

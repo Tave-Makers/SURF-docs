@@ -1,19 +1,80 @@
 # 회원 프로필 조회
 
-{% swagger method="get" path="/v1/user/members/profile" baseUrl="" summary="마이페이지 프로필 정보 조회" %}
-{% swagger-description %}
-마이페이지에서 프로필 정보를 조회합니다. memberId 파라미터 없이 호출하면 본인 프로필을 조회합니다.
-{% endswagger-description %}
+## 마이페이지 프로필 정보 조회
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 개요
+마이페이지에서 프로필 정보를 조회합니다. `memberId` 파라미터 없이 호출하면 현재 로그인한 사용자 본인의 프로필을 조회합니다.
 
-{% swagger-parameter in="query" name="memberId" type="Long" required="false" %}
-조회할 회원 ID (없으면 현재 사용자)
-{% endswagger-parameter %}
+### 엔드포인트
+`GET /v1/user/members/profile`
 
-{% swagger-response status="200" description="프로필 조회 성공" %}
+### 인증
+- **인증 필요 여부:** 필요
+- **권한:** `MEMBER`, `MANAGER`, `PRESIDENT`, `ADMIN`
+
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
+
+### 요청 (Request)
+
+**Headers**
+
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| `Authorization` | String | `Bearer {accessToken}` | O |
+
+**Query Parameters**
+
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| `memberId` | Long | 조회할 회원 ID (없으면 본인 조회) | X |
+
+**요청 예시**
+
+```
+GET /v1/user/members/profile
+GET /v1/user/members/profile?memberId=2
+```
+
+---
+
+### 응답 (Response)
+
+**성공**
+
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 | OK - 프로필 조회 성공 |
+
+**Body**
+
+| Key | Type | 설명 |
+|-----|------|------|
+| `username` | String | 회원 이름 |
+| `profileImageUrl` | String | 프로필 이미지 URL |
+| `phoneNumberPublic` | Boolean | 전화번호 공개 여부 |
+| `phoneNumber` | String | 전화번호 (비공개이고 타인 조회 시 null) |
+| `selfIntroduction` | String | 자기소개 |
+| `link` | String | 링크 |
+| `email` | String | 이메일 |
+| `university` | String | 대학교 |
+| `graduateSchool` | String | 대학원 |
+| `role` | String | 회원 역할 |
+| `activityScore` | BigDecimal | 활동 점수 |
+| `isActive` | Boolean | 활동 여부 |
+| `trackList` | Array | 트랙 정보 리스트 |
+| `trackList[].generation` | Integer | 기수 |
+| `trackList[].part` | String | 파트 |
+| `careerList` | Array | 경력 정보 리스트 |
+| `careerList[].careerId` | Long | 경력 ID |
+| `careerList[].companyName` | String | 회사명 |
+| `careerList[].position` | String | 직무 |
+| `careerList[].startDate` | String | 근무 시작일 (YYYY-MM) |
+| `careerList[].endDate` | String | 근무 종료일 (YYYY-MM) |
+| `careerList[].isWorking` | Boolean | 현재 근무 중 여부 |
+
+**응답 예시**
+
 ```json
 {
   "code": 200,
@@ -50,24 +111,3 @@ Bearer {accessToken}
   }
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
-
-### Response 필드
-
-| 필드 | 타입 | 설명 |
-|------|------|------|
-| username | String | 회원 이름 |
-| profileImageUrl | String | 프로필 이미지 URL |
-| phoneNumberPublic | Boolean | 전화번호 공개 여부 |
-| phoneNumber | String | 전화번호 |
-| selfIntroduction | String | 자기소개 (최대 256자) |
-| link | String | 링크 (최대 1024자) |
-| email | String | 이메일 |
-| university | String | 대학교 |
-| graduateSchool | String | 대학원 |
-| role | String | 회원 역할 |
-| activityScore | BigDecimal | 활동 점수 |
-| isActive | Boolean | 활동/비활동 여부 |
-| trackList | Array | 트랙 정보 리스트 |
-| careerList | Array | 경력 정보 리스트 |

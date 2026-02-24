@@ -1,39 +1,33 @@
-# 활동기록 부여
+## 활동기록 부여
 
-{% swagger method="post" path="/v1/admin/activity-records" baseUrl="" summary="활동 점수(기록) 부여 (관리자)" %}
-{% swagger-description %}
+### 개요
 관리자가 회원에게 활동 점수(기록)를 부여합니다. 상점 또는 벌점을 부여할 수 있습니다.
-{% endswagger-description %}
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`POST /v1/admin/activity-records`
 
-{% swagger-parameter in="body" name="memberIdList" type="Array" required="true" %}
-대상 회원 ID 목록
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** JWT 인증 필요
+- **권한:** `ADMIN`, `PRESIDENT`, `MANAGER`
 
-{% swagger-parameter in="body" name="activityName" type="String" required="true" %}
-활동 유형 (ActivityType Enum)
-{% endswagger-parameter %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
 
-{% swagger-parameter in="body" name="activityDate" type="String" required="true" %}
-활동 날짜 (YYYY-MM-DD)
-{% endswagger-parameter %}
+### 요청 (Request)
 
-{% swagger-response status="201" description="부여 성공" %}
-```json
-{
-  "code": 201,
-  "message": "[활동 기록]이 성공적으로 부여되었습니다.",
-  "data": null
-}
-```
-{% endswagger-response %}
-{% endswagger %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | Y |
 
-### ActivityType (상점)
+**Body**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| memberIdList | Array\<Long\> | 대상 회원 ID 목록 | Y |
+| activityName | String | 활동 유형 (아래 ActivityType 참조) | Y |
+| activityDate | String | 활동 날짜 (YYYY-MM-DD) | Y |
 
+**ActivityType (상점)**
 | 값 | 설명 | 점수 |
 |----|------|------|
 | ATTENDANCE | 출석 | +3 |
@@ -47,20 +41,36 @@ Bearer {accessToken}
 | COLLABORATIVE_PROJECT | 연합 프로젝트 | +15 |
 | EXCELLENT_MEMBER | 우수 회원 | +20 |
 
-### ActivityType (벌점)
-
+**ActivityType (벌점)**
 | 값 | 설명 | 점수 |
 |----|------|------|
 | ABSENCE | 결석 | -5 |
 | LATE_SUBMISSION | 지각 제출 | -3 |
 | UNEXCUSED_ABSENCE | 무단 결석 | -10 |
 
-### Request Body 예시
-
+**요청 예시**
 ```json
 {
   "memberIdList": [1, 2, 3],
   "activityName": "ATTENDANCE",
   "activityDate": "2025-02-24"
+}
+```
+
+---
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 201 Created | 부여 성공 |
+
+**응답 예시**
+```json
+{
+  "code": 201,
+  "message": "[활동 기록]이 성공적으로 부여되었습니다.",
+  "data": null
 }
 ```

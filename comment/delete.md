@@ -1,32 +1,62 @@
-# 댓글 삭제
+## 댓글 삭제
 
-{% swagger method="delete" path="/v1/user/posts/{postId}/comments/{commentId}" baseUrl="" summary="댓글 삭제" %}
-{% swagger-description %}
+### 개요
 본인이 작성한 댓글을 삭제합니다. Hard 삭제 처리됩니다.
-{% endswagger-description %}
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`DELETE /v1/user/posts/{postId}/comments/{commentId}`
 
-{% swagger-parameter in="path" name="postId" type="Long" required="true" %}
-게시글 ID
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** JWT 인증 필요
+- **권한:** `MEMBER` (본인 댓글만 삭제 가능)
 
-{% swagger-parameter in="path" name="commentId" type="Long" required="true" %}
-댓글 ID
-{% endswagger-parameter %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
 
-{% swagger-response status="204" description="삭제 성공" %}
+### 요청 (Request)
+
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | O |
+
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| postId | Long | 게시글 ID | O |
+| commentId | Long | 댓글 ID | O |
+
+**요청 예시**
+```
+DELETE /v1/user/posts/3/comments/15
+```
+
+---
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 204 No Content | 삭제 성공 |
+
+**응답 예시**
 ```json
 {
   "code": 204,
   "message": "[댓글]이 성공적으로 삭제되었습니다."
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="403" description="본인 댓글이 아님" %}
+---
+
+### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 403 Forbidden | 권한 없음 | 본인의 댓글이 아님 |
+| 404 Not Found | 리소스 없음 | 댓글이 존재하지 않음 |
+
+**응답 예시**
 ```json
 {
   "code": 403,
@@ -34,9 +64,7 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="404" description="댓글 없음" %}
 ```json
 {
   "code": 404,
@@ -44,5 +72,3 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}

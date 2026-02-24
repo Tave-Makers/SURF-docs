@@ -1,19 +1,40 @@
-# 게시글 삭제
+## 게시글 삭제
 
-{% swagger method="delete" path="/v1/user/posts/{postId}" baseUrl="" summary="게시글 삭제" %}
-{% swagger-description %}
-본인이 작성한 게시글을 삭제합니다. 작성자만 삭제 가능합니다.
-{% endswagger-description %}
+### 개요
+본인이 작성한 게시글을 삭제합니다. 작성자 본인만 삭제 가능합니다.
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`DELETE /v1/user/posts/{postId}`
 
-{% swagger-parameter in="path" name="postId" type="Long" required="true" %}
-게시글 ID
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** 필요
+- **권한:** `MEMBER` (작성자 본인만)
 
-{% swagger-response status="204" description="삭제 성공" %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
+
+### 요청 (Request)
+
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 액세스 토큰 | O |
+
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| postId | Long | 게시글 ID | O |
+
+---
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 204 No Content | 게시글 삭제 성공 |
+
+**응답 예시**
 ```json
 {
   "code": 204,
@@ -21,9 +42,16 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="401" description="권한 없음 (작성자가 아님)" %}
+---
+
+### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 401 Unauthorized | 권한 없음 | 작성자 본인이 아닌 경우 |
+| 404 Not Found | 게시글 없음 | 해당 ID의 게시글이 존재하지 않음 또는 이미 삭제됨 |
+
+**응답 예시**
 ```json
 {
   "code": 401,
@@ -31,9 +59,6 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-
-{% swagger-response status="404" description="게시글 없음 또는 이미 삭제됨" %}
 ```json
 {
   "code": 404,
@@ -41,5 +66,3 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}

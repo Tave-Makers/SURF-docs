@@ -1,31 +1,74 @@
-# 댓글 목록 조회
+## 댓글 목록 조회
 
-{% swagger method="get" path="/v1/user/posts/{postId}/comments" baseUrl="" summary="댓글 목록 조회 (페이징)" %}
-{% swagger-description %}
-특정 게시글의 루트 댓글과 대댓글을 모두 조회합니다.
-{% endswagger-description %}
+### 개요
+특정 게시글의 루트 댓글과 대댓글을 페이징하여 조회합니다.
 
-{% swagger-parameter in="header" name="Authorization" type="String" required="true" %}
-Bearer {accessToken}
-{% endswagger-parameter %}
+### 엔드포인트
+`GET /v1/user/posts/{postId}/comments`
 
-{% swagger-parameter in="path" name="postId" type="Long" required="true" %}
-게시글 ID
-{% endswagger-parameter %}
+### 인증
+- **인증 필요 여부:** JWT 인증 필요
+- **권한:** `MEMBER`, `ADMIN`, `PRESIDENT`, `MANAGER`
 
-{% swagger-parameter in="query" name="page" type="Integer" required="false" %}
-페이지 번호 (기본값: 0)
-{% endswagger-parameter %}
+> 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
+> `Authorization: Bearer {JWT_TOKEN}`
 
-{% swagger-parameter in="query" name="size" type="Integer" required="false" %}
-페이지 크기 (기본값: 10)
-{% endswagger-parameter %}
+### 요청 (Request)
 
-{% swagger-parameter in="query" name="sort" type="String" required="false" %}
-정렬 기준 (기본값: createdAt,desc)
-{% endswagger-parameter %}
+**Headers**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| Authorization | String | Bearer 토큰 | O |
 
-{% swagger-response status="200" description="조회 성공" %}
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| postId | Long | 게시글 ID | O |
+
+**Query Parameters**
+| Key | Type | 설명 | 필수 | 기본값 |
+|-----|------|------|------|--------|
+| page | Integer | 페이지 번호 | X | 0 |
+| size | Integer | 페이지 크기 | X | 10 |
+| sort | String | 정렬 기준 | X | createdAt,desc |
+
+**요청 예시**
+```
+GET /v1/user/posts/3/comments?page=0&size=10&sort=createdAt,desc
+```
+
+---
+
+### 응답 (Response)
+
+**성공**
+| HTTP Status | 의미 |
+|-------------|------|
+| 200 OK | 조회 성공 |
+
+**Body**
+| Key | Type | 설명 |
+|-----|------|------|
+| comments | Array | 댓글 목록 |
+| comments[].id | Long | 댓글 ID |
+| comments[].postId | Long | 게시글 ID |
+| comments[].rootId | Long | 루트 댓글 ID |
+| comments[].parentId | Long | 부모 댓글 ID (루트면 null) |
+| comments[].depth | Integer | 댓글 깊이 (0=루트) |
+| comments[].content | String | 댓글 내용 |
+| comments[].memberId | Long | 작성자 회원 ID |
+| comments[].nickname | String | 작성자 닉네임 |
+| comments[].profileImageUrl | String | 작성자 프로필 이미지 URL |
+| comments[].likeCount | Long | 좋아요 수 |
+| comments[].liked | Boolean | 현재 사용자 좋아요 여부 |
+| comments[].createdAt | String | 작성일시 |
+| comments[].mentions | Array | 멘션된 회원 목록 |
+| comments[].mentions[].memberId | Long | 멘션된 회원 ID |
+| comments[].mentions[].nickname | String | 멘션된 회원 닉네임 |
+| totalCount | Long | 전체 댓글 수 |
+| hasNext | Boolean | 다음 페이지 존재 여부 |
+
+**응답 예시**
 ```json
 {
   "code": 200,
@@ -78,9 +121,15 @@ Bearer {accessToken}
   }
 }
 ```
-{% endswagger-response %}
 
-{% swagger-response status="404" description="게시글 없음" %}
+---
+
+### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 404 Not Found | 리소스 없음 | 게시글이 존재하지 않음 |
+
+**응답 예시**
 ```json
 {
   "code": 404,
@@ -88,23 +137,3 @@ Bearer {accessToken}
   "data": null
 }
 ```
-{% endswagger-response %}
-{% endswagger %}
-
-### Response 필드
-
-| 필드 | 타입 | 설명 |
-|------|------|------|
-| id | Long | 댓글 ID |
-| postId | Long | 게시글 ID |
-| rootId | Long | 루트 댓글 ID |
-| parentId | Long | 부모 댓글 ID (루트면 null) |
-| depth | Integer | 댓글 깊이 (0=루트) |
-| content | String | 댓글 내용 |
-| memberId | Long | 작성자 회원 ID |
-| nickname | String | 작성자 닉네임 |
-| profileImageUrl | String | 작성자 프로필 이미지 |
-| likeCount | Long | 좋아요 수 |
-| liked | Boolean | 현재 사용자 좋아요 여부 |
-| createdAt | String | 작성일시 |
-| mentions | Array | 멘션된 회원 목록 |
