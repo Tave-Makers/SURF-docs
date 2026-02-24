@@ -5,7 +5,7 @@
 
 ### 인증
 - **인증 필요 여부:** 필요
-- **권한:** `MEMBER`, `ADMIN`, `PRESIDENT`, `MANAGER`
+- **권한:** 일반 사용자 접근 가능 (MEMBER 이상)
 
 > 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
 > `Authorization: Bearer {JWT_TOKEN}`

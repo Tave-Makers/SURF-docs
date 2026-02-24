@@ -12,7 +12,7 @@
 
 #### 인증
 - **인증 필요 여부:** JWT 인증 필요
-- **권한:** `ADMIN`, `PRESIDENT`, `MANAGER`
+- **권한:** 관리자만 접근 가능 (MANAGER 이상)
 
 > 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
 > `Authorization: Bearer {JWT_TOKEN}`
@@ -70,7 +70,7 @@
 
 #### 인증
 - **인증 필요 여부:** JWT 인증 필요
-- **권한:** `ADMIN`, `PRESIDENT`, `MANAGER`
+- **권한:** 관리자만 접근 가능 (MANAGER 이상)
 
 > 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
 > `Authorization: Bearer {JWT_TOKEN}`
@@ -139,7 +139,7 @@
 
 #### 인증
 - **인증 필요 여부:** JWT 인증 필요
-- **권한:** `ADMIN`, `PRESIDENT`, `MANAGER`
+- **권한:** 관리자만 접근 가능 (MANAGER 이상)
 
 > 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
 > `Authorization: Bearer {JWT_TOKEN}`
@@ -216,7 +216,7 @@
 
 #### 인증
 - **인증 필요 여부:** JWT 인증 필요
-- **권한:** `ADMIN`, `PRESIDENT`, `MANAGER`
+- **권한:** 관리자만 접근 가능 (MANAGER 이상)
 
 > 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
 > `Authorization: Bearer {JWT_TOKEN}`
@@ -261,7 +261,7 @@
 
 #### 인증
 - **인증 필요 여부:** JWT 인증 필요
-- **권한:** `ADMIN`, `PRESIDENT`, `MANAGER`
+- **권한:** 관리자만 접근 가능 (MANAGER 이상)
 
 > 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
 > `Authorization: Bearer {JWT_TOKEN}`

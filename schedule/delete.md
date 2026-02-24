@@ -1,14 +1,14 @@
-## 댓글 삭제
+## 일정 삭제
 
 ### 개요
-본인이 작성한 댓글을 삭제합니다. Hard 삭제 처리됩니다.
+일정을 삭제합니다.
 
 ### 엔드포인트
-`DELETE /v1/user/posts/{postId}/comments/{commentId}`
+`DELETE /v1/admin/schedules/{scheduleId}`
 
 ### 인증
 - **인증 필요 여부:** JWT 인증 필요
-- **권한:** 일반 사용자 접근 가능 (MEMBER 이상, 본인 댓글만 삭제 가능)
+- **권한:** 관리자만 접근 가능 (MANAGER 이상)
 
 > 요청 헤더(Header)에 아래와 같이 Authorization 필드를 포함해야 합니다.
 > `Authorization: Bearer {JWT_TOKEN}`
@@ -23,12 +23,11 @@
 **Path Parameters**
 | Key | Type | 설명 | 필수 |
 |-----|------|------|------|
-| postId | Long | 게시글 ID | O |
-| commentId | Long | 댓글 ID | O |
+| scheduleId | Long | 일정 ID | O |
 
 **요청 예시**
 ```
-DELETE /v1/user/posts/3/comments/15
+DELETE /v1/admin/schedules/5
 ```
 
 ---
@@ -38,13 +37,13 @@ DELETE /v1/user/posts/3/comments/15
 **성공**
 | HTTP Status | 의미 |
 |-------------|------|
-| 204 No Content | 삭제 성공 |
+| 200 OK | 일정 삭제 성공 |
 
 **응답 예시**
 ```json
 {
-  "code": 204,
-  "message": "[댓글]이 성공적으로 삭제되었습니다."
+  "code": 200,
+  "message": "[일정]이 성공적으로 삭제되었습니다."
 }
 ```
 
@@ -53,22 +52,13 @@ DELETE /v1/user/posts/3/comments/15
 ### 실패 (Error)
 | HTTP Status | 의미 | 설명 |
 |-------------|------|------|
-| 403 Forbidden | 권한 없음 | 본인의 댓글이 아님 |
-| 404 Not Found | 리소스 없음 | 댓글이 존재하지 않음 |
+| 404 Not Found | 리소스 없음 | 일정이 존재하지 않음 |
 
 **응답 예시**
 ```json
 {
-  "code": 403,
-  "message": "본인의 [댓글]이 아닙니다.",
-  "data": null
-}
-```
-
-```json
-{
   "code": 404,
-  "message": "존재하지 않는 [댓글]입니다.",
+  "message": "존재하지 않는 [일정]입니다.",
   "data": null
 }
 ```

@@ -83,6 +83,13 @@
 * [알림 읽음 처리](notification/read.md)
 * [FCM 토큰 등록](notification/device-token.md)
 
+## Schedule (일정) <a href="#schedule" id="schedule"></a>
+
+* [캘린더 일정](schedule/calendar.md)
+* [게시글 연동 일정](schedule/post-schedule.md)
+* [일정 수정](schedule/update.md)
+* [일정 삭제](schedule/delete.md)
+
 ## File (파일 업로드) <a href="#file" id="file"></a>
 
 * [PreSigned URL 생성](file/presigned-url.md)
