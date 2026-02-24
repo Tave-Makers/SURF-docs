@@ -1,4 +1,4 @@
-## 활동점수 조회
+## 활동점수 조회 (고정 5개 포함)
 
 ### 개요
 개인 활동점수와 최근 고정된 5개의 활동기록을 함께 조회합니다.
@@ -18,7 +18,7 @@
 **Headers**
 | Key | Type | 설명 | 필수 |
 |-----|------|------|------|
-| Authorization | String | Bearer 토큰 | Y |
+| Authorization | String | Bearer 토큰 | O |
 
 ---
 
@@ -33,13 +33,14 @@
 | Key | Type | 설명 |
 |-----|------|------|
 | personalScore | BigDecimal | 개인 활동점수 |
-| pinnedRecords | Array | 고정된 최근 5개 활동기록 |
+| pinnedRecords | Array\<ActivityRecordResDTO\> | 고정된 최근 5개 활동기록 |
+| pinnedRecords[].memberId | Long | 회원 ID |
 | pinnedRecords[].categoryName | String | 활동 카테고리명 |
 | pinnedRecords[].activityName | String | 활동 유형명 |
-| pinnedRecords[].scoreType | String | REWARD(상점) / PENALTY(벌점) |
+| pinnedRecords[].scoreType | String | 점수 유형 (`REWARD` 또는 `PENALTY`) |
 | pinnedRecords[].appliedScore | BigDecimal | 적용된 점수 |
 | pinnedRecords[].prefixSum | BigDecimal | 누적 점수 |
-| pinnedRecords[].activityDate | String | 활동 날짜 (YY.MM.DD) |
+| pinnedRecords[].activityDate | String | 활동 날짜 (YY.MM.DD 형식) |
 
 > 기본 점수: YB(신입) = 100점, 기존 회원 = 50점
 
@@ -49,14 +50,15 @@
   "code": 200,
   "message": "[활동 점수]가 성공적으로 조회되었습니다.",
   "data": {
-    "personalScore": 103.0,
+    "personalScore": 105.0,
     "pinnedRecords": [
       {
-        "categoryName": "출석",
-        "activityName": "정규 세션 출석",
+        "memberId": 1,
+        "categoryName": "정규 행사",
+        "activityName": "행사 얼리버드",
         "scoreType": "REWARD",
-        "appliedScore": 3.0,
-        "prefixSum": 103.0,
+        "appliedScore": 5.0,
+        "prefixSum": 105.0,
         "activityDate": "25.02.24"
       }
     ]
@@ -70,6 +72,7 @@
 | HTTP Status | 의미 | 설명 |
 |-------------|------|------|
 | 400 Bad Request | 조회 실패 | 개인활동점수를 조회할 수 없음 |
+| 401 Unauthorized | 인증 실패 | JWT 토큰 누락 또는 만료 |
 
 **응답 예시**
 ```json

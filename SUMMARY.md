@@ -15,9 +15,12 @@
 * [회원 프로필 조회](member/profile.md)
 * [회원 프로필 수정](member/profile-update.md)
 * [회원 검색](member/search.md)
+* [회원 탈퇴](member/withdraw.md)
 * [회원가입 승인/거절](member/approve-reject.md)
 * [회원 역할 변경](member/role-change.md)
 * [관리자 회원 조회](member/admin-search.md)
+* [관리자 회원 관리](member/admin-member.md)
+* [관리자 페이지 로그인](member/admin-login.md)
 
 ## Board (게시판) <a href="#board" id="board"></a>
 
@@ -66,11 +69,25 @@
 * [뱃지 부여](badge/create.md)
 * [내 뱃지 조회](badge/my-list.md)
 
-## Activity & Score (활동기록/점수) <a href="#activity" id="activity"></a>
+## Activity (활동기록) <a href="#activity" id="activity"></a>
 
 * [활동기록 부여](activity/create.md)
 * [활동기록 조회](activity/list.md)
 * [활동점수 조회](activity/score.md)
+* [활동 종류/카테고리 조회](activity/types.md)
+* [관리자 활동기록 관리](activity/admin-crud.md)
+
+## Score (점수 현황) <a href="#score" id="score"></a>
+
+* [활동점수 + 고정 활동기록 조회](score/personal.md)
+* [관리자 점수 현황 조회](score/ranking.md)
+
+## Team (팀) <a href="#team" id="team"></a>
+
+* [팀 생성](team/create.md)
+* [팀 조회](team/list.md)
+* [팀 수정](team/update.md)
+* [팀 삭제](team/delete.md)
 
 ## Feedback (피드백) <a href="#feedback" id="feedback"></a>
 
