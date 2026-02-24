@@ -1,11 +1,11 @@
-## 개인별 상/벌점 현황 조회
+## 팀별 상/벌점 현황 조회
 
 ### 개요
-활동 멤버들의 개인별 상/벌점 현황을 totalScore 내림차순으로 조회합니다.
-탈퇴(WITHDRAWN) 상태의 멤버는 제외되며, 무한스크롤(Slice) 형태의 페이지네이션을 지원합니다.
+팀별 상/벌점 현황을 totalScore 내림차순으로 조회합니다.
+선택적으로 generation 파라미터를 전달하여 특정 기수의 팀만 필터링할 수 있으며, 무한스크롤(Slice) 형태의 페이지네이션을 지원합니다.
 
 ### 엔드포인트
-`GET /v1/admin/scores/members`
+`GET /v1/admin/scores/teams`
 
 ### 인증
 - **인증 필요 여부:** JWT 인증 필요
@@ -24,6 +24,7 @@
 **Query Parameters**
 | Key | Type | 설명 | 필수 |
 |-----|------|------|------|
+| generation | Integer | 기수 필터 (미전달 시 전체 조회) | X |
 | pageNum | int | 페이지 번호 (0부터 시작) | O |
 | pageSize | int | 한 페이지당 항목 수 | O |
 
@@ -39,11 +40,10 @@
 **Body**
 | Key | Type | 설명 |
 |-----|------|------|
-| content | Array | 멤버별 점수 목록 |
-| content[].memberId | Long | 멤버 ID |
-| content[].profileImageUrl | String | 프로필 이미지 URL |
-| content[].name | String | 멤버 이름 |
-| content[].part | String | 파트명 (최신 기수 기준, 없으면 null) |
+| content | Array | 팀별 점수 목록 |
+| content[].teamId | Long | 팀 ID |
+| content[].teamName | String | 팀 이름 |
+| content[].teamType | String | 팀 유형 (STUDY / PROJECT) |
 | content[].rewardTotal | BigDecimal | 상점 누적 합계 |
 | content[].penaltyTotal | BigDecimal | 벌점 누적 합계 (양수로 표시) |
 | content[].totalScore | BigDecimal | 총 활동점수 |
@@ -56,26 +56,24 @@
 ```json
 {
   "code": 200,
-  "message": "[개인별 상/벌점 현황]을 조회합니다.",
+  "message": "[팀별 상/벌점 현황]을 조회합니다.",
   "data": {
     "content": [
       {
-        "memberId": 1,
-        "profileImageUrl": "https://example.com/profile/1.jpg",
-        "name": "홍길동",
-        "part": "WEB",
-        "rewardTotal": 25.0,
-        "penaltyTotal": 10.0,
-        "totalScore": 115.0
+        "teamId": 1,
+        "teamName": "SURF 프로젝트팀",
+        "teamType": "PROJECT",
+        "rewardTotal": 0.0,
+        "penaltyTotal": 5.0,
+        "totalScore": -5.0
       },
       {
-        "memberId": 2,
-        "profileImageUrl": "https://example.com/profile/2.jpg",
-        "name": "김철수",
-        "part": "SERVER",
-        "rewardTotal": 15.0,
-        "penaltyTotal": 30.0,
-        "totalScore": 85.0
+        "teamId": 2,
+        "teamName": "Spring 스터디",
+        "teamType": "STUDY",
+        "rewardTotal": 0.0,
+        "penaltyTotal": 10.0,
+        "totalScore": -10.0
       }
     ],
     "pageNumber": 0,

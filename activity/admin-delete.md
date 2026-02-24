@@ -1,10 +1,10 @@
-## 활동기록 부여 (V1 - Admin)
+## 활동기록 삭제 (관리자)
 
 ### 개요
-관리자가 회원에게 활동 점수(기록)를 부여합니다. 여러 회원에게 동시에 상점 또는 벌점을 부여할 수 있습니다.
+관리자가 특정 활동기록을 삭제(소프트 삭제)합니다. 이미 삭제된 기록을 다시 삭제하려 하면 에러가 발생합니다.
 
 ### 엔드포인트
-`POST /v1/admin/activity-records`
+`DELETE /v1/admin/activity-records/{activityRecordId}`
 
 ### 인증
 - **인증 필요 여부:** JWT 인증 필요
@@ -20,22 +20,14 @@
 |-----|------|------|------|
 | Authorization | String | Bearer 토큰 | O |
 
-**Body**
+**Path Parameters**
 | Key | Type | 설명 | 필수 |
 |-----|------|------|------|
-| memberIdList | Array\<Long\> | 대상 회원 ID 목록 | O |
-| category | String | 활동 카테고리 (ActivityCategory enum) | X |
-| activityName | String | 활동 유형 (ActivityType enum, 아래 참조) | O |
-| activityDate | String | 활동 날짜 (YYYY-MM-DD) | O |
+| activityRecordId | Long | 삭제 대상 활동기록 ID | O |
 
 **요청 예시**
-```json
-{
-  "memberIdList": [1, 2, 3],
-  "category": "REGULAR_SESSION",
-  "activityName": "EARLY_BIRD",
-  "activityDate": "2025-02-24"
-}
+```
+DELETE /v1/admin/activity-records/631799735897088000
 ```
 
 ---
@@ -45,14 +37,13 @@
 **성공**
 | HTTP Status | 의미 |
 |-------------|------|
-| 201 Created | 부여 성공 |
+| 200 OK | 삭제 성공 |
 
 **응답 예시**
 ```json
 {
-  "code": 201,
-  "message": "[활동 기록]을 적용했습니다.",
-  "data": null
+  "code": 200,
+  "message": "[활동 기록]을 삭제했습니다."
 }
 ```
 
@@ -61,6 +52,7 @@
 ### 실패 (Error)
 | HTTP Status | 의미 | 설명 |
 |-------------|------|------|
-| 400 Bad Request | 요청 실패 | 유효하지 않은 요청 파라미터 |
+| 400 Bad Request | 요청 실패 | 이미 삭제된 활동기록 |
 | 401 Unauthorized | 인증 실패 | JWT 토큰 누락 또는 만료 |
 | 403 Forbidden | 권한 부족 | 관리자 권한 필요 |
+| 404 Not Found | 조회 실패 | 해당 활동기록을 찾을 수 없음 |

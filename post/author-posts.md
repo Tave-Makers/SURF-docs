@@ -1,7 +1,7 @@
-## 게시판별 게시글 목록 조회
+## 특정 작성자의 게시글 조회
 
 ### 개요
-게시판별 게시글 목록을 조회합니다.
+특정 작성자가 작성한 게시글 목록을 조회합니다.
 
 ### 인증
 - **인증 필요 여부:** 필요
@@ -13,7 +13,7 @@
 ---
 
 ### 엔드포인트
-`GET /v1/user/posts/board/{boardId}`
+`GET /v1/user/posts/author/{authorId}`
 
 ### 요청 (Request)
 
@@ -25,12 +25,11 @@
 **Path Parameters**
 | Key | Type | 설명 | 필수 |
 |-----|------|------|------|
-| boardId | Long | 게시판 ID | O |
+| authorId | Long | 작성자 회원 ID | O |
 
 **Query Parameters**
 | Key | Type | 설명 | 필수 |
 |-----|------|------|------|
-| category | String | 카테고리명 (미지정 시 전체 조회) | X |
 | page | Integer | 페이지 번호 (기본값: 0) | X |
 | size | Integer | 페이지 크기 (기본값: 12) | X |
 
@@ -45,27 +44,11 @@
 ```json
 {
   "code": 200,
-  "message": "[게시판]별 [게시글] 목록을 성공적으로 조회했습니다.",
+  "message": "특정 회원이 작성한 [게시글] 목록을 성공적으로 조회했습니다.",
   "data": {
     "content": [...],
-    "hasNext": true
+    "hasNext": false
   }
-}
-```
-
----
-
-### 실패 (Error)
-| HTTP Status | 의미 | 설명 |
-|-------------|------|------|
-| 404 Not Found | 게시판 없음 | 해당 ID의 게시판이 존재하지 않음 |
-
-**응답 예시**
-```json
-{
-  "code": 404,
-  "message": "존재하지 않는 [게시판]입니다.",
-  "data": null
 }
 ```
 

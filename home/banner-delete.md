@@ -1,10 +1,10 @@
-## 홈 문구 조회
+## 배너 삭제
 
 ### 개요
-홈 화면에 표시되는 메인 문구를 조회합니다.
+특정 배너를 삭제합니다.
 
 ### 엔드포인트
-`GET /v1/admin/home/content`
+`DELETE /v1/admin/home/banners/{bannerId}`
 
 ### 인증
 - **인증 필요 여부:** JWT 인증 필요
@@ -20,6 +20,11 @@
 |-----|------|------|------|
 | Authorization | String | Bearer 토큰 | Y |
 
+**Path Parameters**
+| Key | Type | 설명 | 필수 |
+|-----|------|------|------|
+| bannerId | Long | 배너 ID | Y |
+
 ---
 
 ### 응답 (Response)
@@ -27,20 +32,11 @@
 **성공**
 | HTTP Status | 의미 |
 |-------------|------|
-| 200 OK | 조회 성공 |
+| 204 No Content | 삭제 성공 |
 
-**Body**
-| Key | Type | 설명 |
-|-----|------|------|
-| mainText | String | 홈 메인 문구 |
+---
 
-**응답 예시**
-```json
-{
-  "code": 200,
-  "message": "[홈 문구]가 성공적으로 조회되었습니다.",
-  "data": {
-    "mainText": "TAVE와 함께 성장하세요!"
-  }
-}
-```
+### 실패 (Error)
+| HTTP Status | 의미 | 설명 |
+|-------------|------|------|
+| 404 Not Found | 배너 없음 | 해당 배너를 찾을 수 없음 |

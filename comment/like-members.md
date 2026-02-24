@@ -1,7 +1,7 @@
-## 댓글 좋아요 토글
+## 댓글 좋아요 누른 회원 목록 조회
 
 ### 개요
-댓글에 대한 좋아요를 토글합니다. 좋아요 상태이면 취소하고, 취소 상태이면 좋아요를 설정합니다.
+특정 댓글에 좋아요를 누른 회원 목록을 조회합니다.
 
 ### 인증
 - **인증 필요 여부:** JWT 인증 필요
@@ -13,7 +13,7 @@
 ---
 
 ### 엔드포인트
-`POST /v1/user/comments/{commentId}/like`
+`GET /v1/user/comments/{commentId}/like/members`
 
 ### 요청 (Request)
 
@@ -32,34 +32,26 @@
 **성공**
 | HTTP Status | 의미 |
 |-------------|------|
-| 200 OK | 토글 성공 |
+| 200 OK | 조회 성공 |
 
 **Body**
 | Key | Type | 설명 |
 |-----|------|------|
-| liked | Boolean | 좋아요 상태 (true: 좋아요, false: 취소) |
+| memberId | Long | 회원 ID |
+| nickname | String | 닉네임 |
+| profileImageUrl | String | 프로필 이미지 URL |
 
 **응답 예시**
 ```json
 {
   "code": 200,
-  "message": "[댓글 좋아요] 상태가 성공적으로 변경되었습니다.",
-  "data": {
-    "liked": true
-  }
-}
-```
-
-### 실패 (Error)
-| HTTP Status | 의미 | 설명 |
-|-------------|------|------|
-| 404 Not Found | 리소스 없음 | 댓글이 존재하지 않음 |
-
-**응답 예시**
-```json
-{
-  "code": 404,
-  "message": "존재하지 않는 [댓글]입니다.",
-  "data": null
+  "message": "[댓글 좋아요] 누른 회원 목록이 성공적으로 조회되었습니다.",
+  "data": [
+    {
+      "memberId": 5,
+      "nickname": "홍길동",
+      "profileImageUrl": "https://example.com/profile.jpg"
+    }
+  ]
 }
 ```
