@@ -19,8 +19,8 @@
 * [회원 수 조회](member/members-count.md)
 * [기수 정보 조회](member/generations.md)
 * [회원 탈퇴](member/withdraw.md)
-* [회원가입 승인](member/approve.md)
-* [회원가입 거절](member/reject.md)
+* [회원가입 승인](member/approve-member.md)
+* [회원가입 거절](member/reject-member.md)
 * [회원 역할 변경 (단일)](member/role-change.md)
 * [회원 역할 일괄 변경 (다중)](member/role-change-bulk.md)
 * [관리자 회원 조회 (이름)](member/admin-search.md)
@@ -135,6 +135,7 @@
 * [알림 조회](notification/list.md)
 * [알림 읽음 처리](notification/read.md)
 * [FCM 토큰 등록](notification/device-token.md)
+* [FCM 푸시 알림 테스트](notification/test-push.md)
 
 ## Schedule (일정) <a href="#schedule" id="schedule"></a>
 
