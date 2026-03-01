@@ -95,6 +95,14 @@
 
 * [뱃지 부여](badge/create.md)
 * [내 뱃지 조회](badge/my-list.md)
+* [배지 생성](badge/post-create.md)
+* [배지 삭제](badge/delete.md)
+* [배지 목록 조회](badge/get-badge-list.md)
+* [해당 배지 받은 회원 조회](badge/get-members.md)
+* [배지 수정](badge/update.md)
+* [배지 부여](badge/assign.md)
+* [해당 회원의 모든 배지 조회](badge/get-member-badges.md)
+* [배지 회수](badge/remove.md)
 
 ## Activity (활동기록) <a href="#activity" id="activity"></a>
 
