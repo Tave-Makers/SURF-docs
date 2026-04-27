@@ -38,6 +38,7 @@
 * [게시판 단건 조회](board/detail.md)
 * [게시판 수정](board/update.md)
 * [게시판 삭제](board/delete.md)
+* [게시판 카테고리 생성](board/create-category.md)
 
 ## Post (게시글) <a href="#post" id="post"></a>
 
