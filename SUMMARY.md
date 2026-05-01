@@ -104,6 +104,7 @@
 * [배지 부여](badge/assign.md)
 * [해당 회원의 모든 배지 조회](badge/get-member-badges.md)
 * [배지 회수](badge/remove.md)
+* [배지 단건 조회](badge/get-badge-single.md)
 
 ## Activity (활동기록) <a href="#activity" id="activity"></a>
 
