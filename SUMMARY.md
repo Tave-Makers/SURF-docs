@@ -8,6 +8,10 @@
 * [카카오 로그인 콜백](auth/kakao-callback.md)
 * [토큰 재발급](auth/refresh.md)
 * [로그아웃](auth/logout.md)
+* [Apple 로그인 요청](auth/redirect-to-apple.md)
+* [Apple Web 로그인 콜백](auth/apple-web-callback.md)
+* [Apple 앱 SDK 로그인](auth/apple-app-login.md)
+* [카카오 앱 SDK 로그인](auth/kakao-app-login.md)
 
 ## Member (회원) <a href="#member" id="member"></a>
 
@@ -30,6 +34,9 @@
 * [승인된 회원 목록 조회](member/approved-members.md)
 * [관리자 페이지 로그인](member/admin-login.md)
 * [비밀번호 설정](member/admin-password.md)
+* [회원 제명](member/dismiss-member.md)
+* [회원 퇴출](member/expel-member.md)
+* [약관 동의](member/agree-terms.md)
 
 ## Board (게시판) <a href="#board" id="board"></a>
 
@@ -104,6 +111,7 @@
 * [배지 부여](badge/assign.md)
 * [해당 회원의 모든 배지 조회](badge/get-member-badges.md)
 * [배지 회수](badge/remove.md)
+* [배지 단건 조회](badge/get-badge-single.md)
 
 ## Activity (활동기록) <a href="#activity" id="activity"></a>
 
