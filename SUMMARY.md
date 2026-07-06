@@ -8,6 +8,10 @@
 * [카카오 로그인 콜백](auth/kakao-callback.md)
 * [토큰 재발급](auth/refresh.md)
 * [로그아웃](auth/logout.md)
+* [Apple 로그인 요청](auth/redirect-to-apple.md)
+* [Apple Web 로그인 콜백](auth/apple-web-callback.md)
+* [Apple 앱 SDK 로그인](auth/apple-app-login.md)
+* [카카오 앱 SDK 로그인](auth/kakao-app-login.md)
 
 ## Member (회원) <a href="#member" id="member"></a>
 
@@ -30,6 +34,9 @@
 * [승인된 회원 목록 조회](member/approved-members.md)
 * [관리자 페이지 로그인](member/admin-login.md)
 * [비밀번호 설정](member/admin-password.md)
+* [회원 제명](member/dismiss-member.md)
+* [회원 퇴출](member/expel-member.md)
+* [약관 동의](member/agree-terms.md)
 
 ## Board (게시판) <a href="#board" id="board"></a>
 
@@ -39,6 +46,8 @@
 * [게시판 수정](board/update.md)
 * [게시판 삭제](board/delete.md)
 * [게시판 카테고리 생성](board/create-category.md)
+* [게시판 카테고리 삭제](board/delete-category.md)
+* [카테고리 목록 게시판별 조회](board/get-categories-grouped-by-board.md)
 
 ## Post (게시글) <a href="#post" id="post"></a>
 
@@ -56,6 +65,8 @@
 * [최근 검색어 조회](post/recent-search.md)
 * [최근 검색어 전체 삭제](post/recent-search-delete-all.md)
 * [최근 검색어 단건 삭제](post/recent-search-delete.md)
+* [게시글 첨부파일 삭제](post/delete-post-file.md)
+* [게시글 이미지 삭제](post/delete-post-image.md)
 
 ## Comment (댓글) <a href="#comment" id="comment"></a>
 
@@ -104,6 +115,7 @@
 * [배지 부여](badge/assign.md)
 * [해당 회원의 모든 배지 조회](badge/get-member-badges.md)
 * [배지 회수](badge/remove.md)
+* [배지 단건 조회](badge/get-badge-single.md)
 
 ## Activity (활동기록) <a href="#activity" id="activity"></a>
 
